@@ -104,19 +104,37 @@
       border: 0;
       background: var(--bg);
     }
+    /* On phones, stack the logo and text. A side-by-side layout made the
+       text column too narrow and caused the banner to look misaligned. */
     @media (max-width: 720px) {
-      .masthead { min-height: 0; padding: 9px 13px; gap: 22px; }
-      .registration-line, .legal-line { font-size: 9px; }
-      .association { font-size: 13px; }
-      h1 { font-size: 20px; }
-      .subtitle { font-size: 11px; }
+      .masthead {
+        width: 100%;
+        padding: 13px 18px 15px;
+        gap: 8px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .logo-box {
+        width: 154px;
+        height: 88px;
+        flex: 0 0 auto;
+      }
+      .brand-copy { width: 100%; flex: none; align-items: center; }
+      .association { font-size: 14px; line-height: 1.25; margin-bottom: 4px; }
+      h1 { font-size: 22px; line-height: 1.16; }
+      .subtitle { font-size: 11px; margin-top: 5px; }
+      .registration-line { font-size: 10px; margin-top: 7px; }
+      .legal-line { font-size: 9.5px; margin-top: 2px; }
     }
     @media (max-width: 390px) {
-      .masthead { min-height: 0; padding: 8px 10px; gap: 14px; }
-      .association { font-size: 11px; }
-      h1 { font-size: 17px; }
-      .subtitle { font-size: 10px; }
-      .legal-line { display: none; }
+      .masthead { padding: 10px 12px 13px; gap: 6px; }
+      .logo-box { width: 140px; height: 80px; }
+      .association { font-size: 12.5px; }
+      h1 { font-size: 20px; }
+      .subtitle { font-size: 10.5px; }
+      .registration-line { font-size: 9.5px; }
+      .legal-line { font-size: 9px; }
     }
   </style>
 </head>
@@ -146,11 +164,15 @@
     const masthead = document.querySelector('.masthead');
     const brandCopy = document.querySelector('.brand-copy');
     const syncLogoHeight = () => {
-      masthead.style.setProperty('--brand-text-height', brandCopy.getBoundingClientRect().height + 'px');
+      if (window.matchMedia('(min-width: 721px)').matches) {
+        masthead.style.setProperty('--brand-text-height', brandCopy.getBoundingClientRect().height + 'px');
+      } else {
+        masthead.style.removeProperty('--brand-text-height');
+      }
     };
     syncLogoHeight();
     if ('ResizeObserver' in window) new ResizeObserver(syncLogoHeight).observe(brandCopy);
-    else window.addEventListener('resize', syncLogoHeight);
+    window.addEventListener('resize', syncLogoHeight);
 
     // Active Google Apps Script web app deployment URL.
     const APPS_SCRIPT_EXEC_URL = 'https://script.google.com/macros/s/AKfycbxAerFrrBoT4dUjskXC4spnSyidf0ws6QFYHlEeAjzuRwbx9rhpfz-HThmE5ZAuTz37/exec';
