@@ -104,37 +104,46 @@
       border: 0;
       background: var(--bg);
     }
-    /* On phones, stack the logo and text. A side-by-side layout made the
-       text column too narrow and caused the banner to look misaligned. */
-    @media (max-width: 720px) {
+    /* Mobile: compact single-row identity bar, leaving the form visible. */
+    @media (max-width: 600px) {
       .masthead {
         width: 100%;
-        padding: 13px 18px 15px;
-        gap: 8px;
-        flex-direction: column;
+        min-height: 80px;
+        padding: 9px 14px;
+        gap: 14px;
+        flex-direction: row;
         align-items: center;
-        text-align: center;
+        text-align: left;
       }
       .logo-box {
-        width: 154px;
-        height: 88px;
-        flex: 0 0 auto;
+        width: 105px;
+        height: 60px;
+        flex: 0 0 105px;
       }
-      .brand-copy { width: 100%; flex: none; align-items: center; }
-      .association { font-size: 14px; line-height: 1.25; margin-bottom: 4px; }
-      h1 { font-size: 22px; line-height: 1.16; }
-      .subtitle { font-size: 11px; margin-top: 5px; }
-      .registration-line { font-size: 10px; margin-top: 7px; }
-      .legal-line { font-size: 9.5px; margin-top: 2px; }
+      .brand-copy {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+        align-items: flex-start;
+      }
+      .association {
+        font-size: 10.5px;
+        line-height: 1.25;
+        font-weight: 650;
+        margin: 0 0 3px;
+      }
+      h1 {
+        font-size: clamp(17px, 4.6vw, 21px);
+        line-height: 1.15;
+        letter-spacing: -.02em;
+      }
+      .subtitle, .registration-line, .legal-line { display: none; }
     }
-    @media (max-width: 390px) {
-      .masthead { padding: 10px 12px 13px; gap: 6px; }
-      .logo-box { width: 140px; height: 80px; }
-      .association { font-size: 12.5px; }
-      h1 { font-size: 20px; }
-      .subtitle { font-size: 10.5px; }
-      .registration-line { font-size: 9.5px; }
-      .legal-line { font-size: 9px; }
+    @media (max-width: 360px) {
+      .masthead { padding: 8px 10px; gap: 10px; min-height: 72px; }
+      .logo-box { width: 88px; height: 51px; flex-basis: 88px; }
+      .association { font-size: 9.5px; }
+      h1 { font-size: 17px; }
     }
   </style>
 </head>
@@ -160,11 +169,11 @@
             loading="eager"></iframe>
   </main>
   <script>
-    // Match the logo's rendered height to the entire text group at every screen size.
+    // Match the desktop logo height to the text group; mobile uses fixed compact sizing.
     const masthead = document.querySelector('.masthead');
     const brandCopy = document.querySelector('.brand-copy');
     const syncLogoHeight = () => {
-      if (window.matchMedia('(min-width: 721px)').matches) {
+      if (window.matchMedia('(min-width: 601px)').matches) {
         masthead.style.setProperty('--brand-text-height', brandCopy.getBoundingClientRect().height + 'px');
       } else {
         masthead.style.removeProperty('--brand-text-height');
